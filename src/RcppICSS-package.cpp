@@ -69,3 +69,72 @@ bool is_converged(const arma::uvec& oldVec, const arma::uvec& newVec)
     
     return true;
 }
+
+arma::colvec ICSS_step_1_and_2(const arma::colvec& x)
+{
+    colvec change_points();
+
+    auto const Dk = CenteredCusumValues(x);
+    auto tmp = check_critical_value(Dk);
+    int position = tmp[0];
+    
+    if (Rcpp::traits::is_nan<INTSXP>(position))
+    {
+        /* code */
+    }
+    
+}
+
+/*
+ICSS_step_1_and_2 <- function(x){
+
+  change_points <- vector(mode = "numeric")
+
+  if (is.null(x)) return(NA)
+
+  Dk <- CenteredCusumValues(x);
+  tmp <- check_critical_value(Dk);
+  if(length(tmp$position)==0) return(NA)
+  exceeds <- tmp$exceeds
+  position_step1 <- tmp$position
+
+  if(exceeds){
+    position <- position_step1
+
+    while(exceeds){
+      t2 <- position
+      Dk_step2a = CenteredCusumValues(x[1:t2])
+      tmp <- check_critical_value(Dk_step2a)
+      if(length(tmp$position)==0) return(NA)
+      exceeds <- ifelse(is.na(tmp$exceeds), FALSE, tmp$exceeds)
+      position <- tmp$position
+
+    }
+
+    k_first <- t2
+
+    position <- position_step1 + 1
+    exceeds <- TRUE
+
+    while(exceeds){
+      t1 <- position
+      Dk_step2b <- CenteredCusumValues(x[t1:length(x)])
+      tmp <- check_critical_value(Dk_step2b)
+      if(length(tmp$position)==0) return(NA)
+      exceeds <- ifelse(is.na(tmp$exceeds), FALSE, tmp$exceeds)
+      position2 <- tmp$position
+      position <- position2 + position
+    }
+
+    k_last <- t1 - 1
+
+    if (k_first == k_last){
+      change_points <- k_first
+    }else{
+      change_points = c(k_first, k_last)
+    }
+  }
+
+  return(change_points)
+}
+*/
