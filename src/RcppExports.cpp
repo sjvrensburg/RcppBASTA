@@ -12,36 +12,47 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // CenteredCusumValues
-arma::colvec CenteredCusumValues(const arma::colvec& y);
+Rcpp::NumericVector CenteredCusumValues(const Rcpp::NumericVector& y);
 RcppExport SEXP _RcppICSS_CenteredCusumValues(SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::colvec& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type y(ySEXP);
     rcpp_result_gen = Rcpp::wrap(CenteredCusumValues(y));
     return rcpp_result_gen;
 END_RCPP
 }
 // check_critical_value
-Rcpp::List check_critical_value(const arma::colvec& Dk);
+Rcpp::List check_critical_value(const Rcpp::NumericVector& Dk);
 RcppExport SEXP _RcppICSS_check_critical_value(SEXP DkSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::colvec& >::type Dk(DkSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type Dk(DkSEXP);
     rcpp_result_gen = Rcpp::wrap(check_critical_value(Dk));
     return rcpp_result_gen;
 END_RCPP
 }
 // is_converged
-bool is_converged(const arma::uvec& oldVec, const arma::uvec& newVec);
+bool is_converged(const Rcpp::IntegerVector& oldVec, const Rcpp::IntegerVector& newVec);
 RcppExport SEXP _RcppICSS_is_converged(SEXP oldVecSEXP, SEXP newVecSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::uvec& >::type oldVec(oldVecSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type newVec(newVecSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type oldVec(oldVecSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type newVec(newVecSEXP);
     rcpp_result_gen = Rcpp::wrap(is_converged(oldVec, newVec));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ICSS_step_1_and_2
+Rcpp::IntegerVector ICSS_step_1_and_2(const Rcpp::NumericVector& x);
+RcppExport SEXP _RcppICSS_ICSS_step_1_and_2(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(ICSS_step_1_and_2(x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -50,6 +61,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RcppICSS_CenteredCusumValues", (DL_FUNC) &_RcppICSS_CenteredCusumValues, 1},
     {"_RcppICSS_check_critical_value", (DL_FUNC) &_RcppICSS_check_critical_value, 1},
     {"_RcppICSS_is_converged", (DL_FUNC) &_RcppICSS_is_converged, 2},
+    {"_RcppICSS_ICSS_step_1_and_2", (DL_FUNC) &_RcppICSS_ICSS_step_1_and_2, 1},
     {NULL, NULL, 0}
 };
 

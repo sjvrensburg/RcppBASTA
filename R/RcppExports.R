@@ -26,3 +26,7 @@ is_converged <- function(oldVec, newVec) {
     .Call(`_RcppICSS_is_converged`, oldVec, newVec)
 }
 
+ICSS_step_1_and_2 <- function(x) {
+    .Call(`_RcppICSS_ICSS_step_1_and_2`, x)
+}
+
