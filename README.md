@@ -12,7 +12,7 @@ If you have the `remotes` package installed, then you can use the following to i
 remotes::install_github("sjvrensburg/RcppBASTA")
 ```
 
-## Ackowledgements
+## Acknowledgements
 
 Many thanks to [Prof. Piotr Fryzlewicz](https://stats.lse.ac.uk/fryzlewicz/) who made their R implementation of BASTA freely available. You may view the original code at (http://stats.lse.ac.uk/fryzlewicz/basta/basta.html)[http://stats.lse.ac.uk/fryzlewicz/basta/basta.html].
 
