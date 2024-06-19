@@ -1,19 +1,21 @@
-Package: RcppICSS
-Title: What the Package Does (One Line, Title Case)
+Package: RcppBASTA
+Title: BASTA - Binary Segmentation For Transformed ARCH
 Version: 0.0.0.9000
 Authors@R: 
     person("Stéfan", "Janse van Rensburg", , "stefanj@mandala.ac.za", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0749-2277"))
-Description: What the package does (one paragraph).
+Description: Faster implementation of Fryzlewicz and Rao's (2014) BASTA algorithm. Uses Rcpp to speed up certain parts of the algorithm.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 LinkingTo: 
     Rcpp,
+    BH,
     RcppArmadillo
 Imports: 
     Rcpp,
-    RcppArmadillo
+    RcppArmadillo,
+    tseries
 SystemRequirements:
     C++17, GNU make
