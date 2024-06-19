@@ -1,5 +1,5 @@
 ## usethis namespace: start
-#' @useDynLib RcppICSS, .registration = TRUE
+#' @useDynLib RcppBASTA, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @import RcppArmadillo
 ## usethis namespace: end

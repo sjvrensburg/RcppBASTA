@@ -11,61 +11,53 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// CenteredCusumValues
-Rcpp::NumericVector CenteredCusumValues(const Rcpp::NumericVector& y);
-RcppExport SEXP _RcppICSS_CenteredCusumValues(SEXP ySEXP) {
+// stat_resid
+arma::colvec stat_resid(const arma::colvec& x, Rcpp::Nullable<NumericVector> a__, unsigned int order, const double factor, const double epsilon);
+RcppExport SEXP _RcppBASTA_stat_resid(SEXP xSEXP, SEXP a__SEXP, SEXP orderSEXP, SEXP factorSEXP, SEXP epsilonSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(CenteredCusumValues(y));
+    Rcpp::traits::input_parameter< const arma::colvec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<NumericVector> >::type a__(a__SEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
+    Rcpp::traits::input_parameter< const double >::type factor(factorSEXP);
+    Rcpp::traits::input_parameter< const double >::type epsilon(epsilonSEXP);
+    rcpp_result_gen = Rcpp::wrap(stat_resid(x, a__, order, factor, epsilon));
     return rcpp_result_gen;
 END_RCPP
 }
-// check_critical_value
-Rcpp::List check_critical_value(const Rcpp::NumericVector& Dk);
-RcppExport SEXP _RcppICSS_check_critical_value(SEXP DkSEXP) {
+// bin_segm
+Rcpp::List bin_segm(Rcpp::List buh, double th);
+RcppExport SEXP _RcppBASTA_bin_segm(SEXP buhSEXP, SEXP thSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type Dk(DkSEXP);
-    rcpp_result_gen = Rcpp::wrap(check_critical_value(Dk));
+    Rcpp::traits::input_parameter< Rcpp::List >::type buh(buhSEXP);
+    Rcpp::traits::input_parameter< double >::type th(thSEXP);
+    rcpp_result_gen = Rcpp::wrap(bin_segm(buh, th));
     return rcpp_result_gen;
 END_RCPP
 }
-// is_converged
-bool is_converged(const Rcpp::IntegerVector& oldVec, const Rcpp::IntegerVector& newVec);
-RcppExport SEXP _RcppICSS_is_converged(SEXP oldVecSEXP, SEXP newVecSEXP) {
+// inner_prod_iter
+arma::colvec inner_prod_iter(const arma::colvec& x);
+RcppExport SEXP _RcppBASTA_inner_prod_iter(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type oldVec(oldVecSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type newVec(newVecSEXP);
-    rcpp_result_gen = Rcpp::wrap(is_converged(oldVec, newVec));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ICSS_step_1_and_2
-Rcpp::IntegerVector ICSS_step_1_and_2(const Rcpp::NumericVector& x);
-RcppExport SEXP _RcppICSS_ICSS_step_1_and_2(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(ICSS_step_1_and_2(x));
+    Rcpp::traits::input_parameter< const arma::colvec& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(inner_prod_iter(x));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_RcppICSS_CenteredCusumValues", (DL_FUNC) &_RcppICSS_CenteredCusumValues, 1},
-    {"_RcppICSS_check_critical_value", (DL_FUNC) &_RcppICSS_check_critical_value, 1},
-    {"_RcppICSS_is_converged", (DL_FUNC) &_RcppICSS_is_converged, 2},
-    {"_RcppICSS_ICSS_step_1_and_2", (DL_FUNC) &_RcppICSS_ICSS_step_1_and_2, 1},
+    {"_RcppBASTA_stat_resid", (DL_FUNC) &_RcppBASTA_stat_resid, 5},
+    {"_RcppBASTA_bin_segm", (DL_FUNC) &_RcppBASTA_bin_segm, 2},
+    {"_RcppBASTA_inner_prod_iter", (DL_FUNC) &_RcppBASTA_inner_prod_iter, 1},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_RcppICSS(DllInfo *dll) {
+RcppExport void R_init_RcppBASTA(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }
