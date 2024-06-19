@@ -41,7 +41,7 @@ arma::colvec stat_resid(const arma::colvec& x,
         Rcpp::Function f("stat.est");
         a_ = f(x, _["order"] = order);
 
-        for (size_t i = 1; i < a_.length(); ++i)
+        for (uword i = 1; i < a_.length(); ++i)
         {
             a_[i] = a_[i] / factor;
         }
@@ -50,7 +50,7 @@ arma::colvec stat_resid(const arma::colvec& x,
     colvec a = as<colvec>(a_);
     colvec y(n-order);
     const uword n_y = y.n_elem;
-    double sum_a, numerator, denominator;
+    double numerator, denominator;
 
     for (uword i = 0; i < n_y; ++i)
     {

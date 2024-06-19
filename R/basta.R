@@ -92,6 +92,7 @@ best.unbal.haar <- function(x, criterion = max.inner.prod.p) {
   return(z)
 }
 
+#' @export
 max.inner.prod.p <- function(x, p = 0.8) {
   ipi <- inner.prod.iter(x)
   n <- length(ipi)
