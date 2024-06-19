@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Stéfan", "Janse van Rensburg", , "stefanj@mandala.ac.za", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0749-2277"))
-Description: Faster implementation of Fryzlewicz and Rao's (2014) BASTA algorithm. Uses Rcpp to speed up certain parts of the algorithm.
+Description: Faster implementation of Fryzlewicz and Subba Rao's (2014) BASTA algorithm. Uses Rcpp to speed up certain parts of the algorithm.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
