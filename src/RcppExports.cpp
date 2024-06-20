@@ -49,11 +49,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// med
+double med(const arma::colvec& x);
+RcppExport SEXP _RcppBASTA_med(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::colvec& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(med(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_RcppBASTA_stat_resid", (DL_FUNC) &_RcppBASTA_stat_resid, 5},
     {"_RcppBASTA_bin_segm", (DL_FUNC) &_RcppBASTA_bin_segm, 2},
     {"_RcppBASTA_inner_prod_iter", (DL_FUNC) &_RcppBASTA_inner_prod_iter, 1},
+    {"_RcppBASTA_med", (DL_FUNC) &_RcppBASTA_med, 1},
     {NULL, NULL, 0}
 };
 

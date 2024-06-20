@@ -100,11 +100,6 @@ max.inner.prod.p <- function(x, p = 0.8) {
   return(med(which(abs(pip) == max(abs(pip)))) + floor((1 - p) * n))
 }
 
-med <- function(x) {
-  y <- quantile(x, .5, type = 3)
-  return(y[[1]])
-}
-
 reconstr <- function(buh) {
   J <- length(buh$tree)
   n <- buh$tree[[1]][5, 1]

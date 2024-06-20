@@ -13,3 +13,7 @@ inner.prod.iter <- function(x) {
     .Call(`_RcppBASTA_inner_prod_iter`, x)
 }
 
+med <- function(x) {
+    .Call(`_RcppBASTA_med`, x)
+}
+

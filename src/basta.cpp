@@ -120,7 +120,7 @@ Rcpp::List bin_segm(Rcpp::List buh, double th)
 }
 
 // [[Rcpp::export(name = "inner.prod.iter")]]
-arma::colvec inner_prod_iter(const arma::colvec &x)
+arma::colvec inner_prod_iter(const arma::colvec& x)
 {
     using std::sqrt;
 
@@ -144,4 +144,21 @@ arma::colvec inner_prod_iter(const arma::colvec &x)
     }
 
     return I_plus - I_minus;
+}
+
+// [[Rcpp::export]]
+double med(const arma::colvec& x)
+{
+    if (x.n_elem == 1) return x[0];
+    
+    const arma::colvec y = arma::sort(x);
+    const uword j = std::floor(0.5 * (x.n_elem - 1));
+    const double g = 0.5 * (x.n_elem - 1.0) - j;
+
+    if ((std::fabs(g) <= 1E-8) and (j % 2 == 0))
+    {
+        return y[j + 1];
+    }
+
+    return y[j];
 }
