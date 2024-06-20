@@ -37,4 +37,4 @@ Many thanks to [Prof. Piotr Fryzlewicz](https://stats.lse.ac.uk/fryzlewicz/) who
 
 ## Roadmap
 
-At this point, I only implemented `stat.resid`, `bin.segm` and `inner.prod.iter` in C++. The rest of the code is mostly unchanged from that of Prof. Piotr Fryzlewicz. I intend to implement more of the code in C++ at some stage.
+At this point, I only implemented `stat.resid`, `bin.segm`, `inner.prod.iter` and `med` in C++. The rest of the code is mostly unchanged from that of Prof. Piotr Fryzlewicz. I intend to implement more of the code in C++ at some stage.
