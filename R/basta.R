@@ -8,6 +8,8 @@ stat.est <- function(x, order = 1) {
 #' 
 #' If `x` is a piecewise stationary ARCH process, then `detection` returns the estimated
 #' expectation of the function \eqn{g(.)} from the paper.
+#' 
+#' See the paper for additional details.
 #'
 #' @param x a numeric vector giving the time series to analyse
 #' @param order order of the ARCH model
@@ -17,7 +19,7 @@ stat.est <- function(x, order = 1) {
 #' @param log logical, if true, then \eqn{U^{(4)}_t} is used; otherwise \eqn{U^{(3)}_t}
 #' 
 #' 
-#' @return Estimated expectation of the function \eqn{g(.)} from the paper.
+#' @return A list with the estimated expectation of the function \eqn{g(.)} and a vector of change-points.
 #'
 #' @export
 #'
@@ -29,7 +31,40 @@ detection <- function(x, order = 1, factor = 8, c = 0.5, epsilon = 0, log = TRUE
   th <- c * n^(3 / 8)
   xx.buh.th <- bin.segm(xx.buh, th)
   xx.buh.th.rec <- reconstr(xx.buh.th)
-  xx.buh.th.rec
+  indicator <- sapply(
+    unique(xx.buh.th.rec),
+    function(x) min(which(xx.buh.th.rec == x)))
+  if (length(indicator) < 2) stop("No change-points detected.")
+  list(expected_g = xx.buh.th.rec, change_points = indicator[-1])
+}
+
+#' Create `xreg` For Structural Breaks Models
+#' 
+#' Create a matrix of dummy variables for use as external regressons.
+#'
+#' @param y dependent variable
+#' @param demean logical, if `TRUE` then `y` will get demeaned prior to the BASTA algorithm
+#' @param pulse logical, if `TRUE` then dummy variables equal one at detected change-point. If `FALSE` then dummy variables equal one at and after detected breakpoint.
+#' @param ... additional arguments to pass to `detection`
+#'
+#' @return A matrix
+#' @export
+xreg_basta <- function(y, demean = FALSE, pulse = TRUE, ...) {
+  y_ <- zoo::coredata(y)
+  if (demean) y_ <- y_ - mean(y_)
+  idx <- detection(y_, ...)$change_points
+
+  res <- matrix(0L, nrow = length(y), ncol = length(idx))
+
+  for (i in seq_along(idx)) {
+    if (!pulse) {
+      res[(idx[i]):(length(y)), i] <- 1L
+    } else {
+      res[idx[i], i] <- 1L
+    }
+  }
+
+  res
 }
 
 ###########################################################################

@@ -20,9 +20,12 @@ detection(x, order = 1, factor = 8, c = 0.5, epsilon = 0, log = TRUE)
 \item{log}{logical, if true, then \eqn{U^{(4)}_t} is used; otherwise \eqn{U^{(3)}_t}}
 }
 \value{
-Estimated expectation of the function \eqn{g(.)} from the paper.
+A list with the estimated expectation of the function \eqn{g(.)} and a vector of change-points.
 }
 \description{
 If \code{x} is a piecewise stationary ARCH process, then \code{detection} returns the estimated
 expectation of the function \eqn{g(.)} from the paper.
+}
+\details{
+See the paper for additional details.
 }
