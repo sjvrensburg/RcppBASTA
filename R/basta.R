@@ -34,7 +34,7 @@ detection <- function(x, order = 1, factor = 8, c = 0.5, epsilon = 0, log = TRUE
   indicator <- sapply(
     unique(xx.buh.th.rec),
     function(x) min(which(xx.buh.th.rec == x)))
-  if (length(indicator) < 2) stop("No change-points detected.")
+  if (length(indicator) < 2) warning("No change-points detected.")
   list(expected_g = xx.buh.th.rec, change_points = indicator[-1])
 }
 
@@ -52,7 +52,10 @@ detection <- function(x, order = 1, factor = 8, c = 0.5, epsilon = 0, log = TRUE
 xreg_basta <- function(y, demean = FALSE, pulse = TRUE, ...) {
   y_ <- zoo::coredata(y)
   if (demean) y_ <- y_ - mean(y_)
+
   idx <- detection(y_, ...)$change_points
+
+  if (length(idx) < 1) return(NULL)
 
   res <- matrix(0L, nrow = length(y), ncol = length(idx))
 
