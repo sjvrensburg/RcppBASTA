@@ -7,6 +7,7 @@
 
 using Rcpp::_;
 using Rcpp::as;
+using Rcpp::wrap;
 using Rcpp::IntegerVector;
 using Rcpp::List;
 using Rcpp::LogicalVector;
@@ -20,7 +21,7 @@ using arma::colvec;
 using arma::uword;
 
 // [[Rcpp::export(name = "stat.resid")]]
-arma::colvec stat_resid(const arma::colvec& x,
+Rcpp::NumericVector stat_resid(const arma::colvec& x,
     Rcpp::Nullable<NumericVector> a__ = R_NilValue,
     unsigned int order = 1,
     const double factor = 8,
@@ -43,7 +44,7 @@ arma::colvec stat_resid(const arma::colvec& x,
 
         for (uword i = 1; i < a_.length(); ++i)
         {
-            a_[i] = a_[i] / factor;
+            a_(i) = a_(i) / factor;
         }
     }
 
@@ -63,7 +64,7 @@ arma::colvec stat_resid(const arma::colvec& x,
         y(n_y - 1 - i) = numerator / denominator;
     }
 
-    return y;
+    return wrap(y);
 }
 
 // [[Rcpp::export(name = "bin.segm")]]
@@ -87,7 +88,7 @@ Rcpp::List bin_segm(Rcpp::List buh, double th)
 
         for (size_t k = 0; k < K; k++)
         {
-            tree_j(1, k) *= abs(tree_j(1, k)) > th ? 1 : 0;
+            tree_j(1, k) *= abs(tree_j(1, k)) > th ? 1.0 : 0.0;
         }
 
         trees[j] = tree_j;
@@ -120,7 +121,7 @@ Rcpp::List bin_segm(Rcpp::List buh, double th)
 }
 
 // [[Rcpp::export(name = "inner.prod.iter")]]
-arma::colvec inner_prod_iter(const arma::colvec& x)
+Rcpp::NumericVector inner_prod_iter(const arma::colvec& x)
 {
     using std::sqrt;
 
@@ -143,22 +144,20 @@ arma::colvec inner_prod_iter(const arma::colvec& x)
         }        
     }
 
-    return I_plus - I_minus;
+    return wrap(I_plus - I_minus);
 }
 
 // [[Rcpp::export]]
 double med(const arma::colvec& x)
 {
-    if (x.n_elem == 1) return x[0];
+    x.brief_print();
+    if (x.n_elem <= 1) return R_NaReal;
     
     const arma::colvec y = arma::sort(x);
     const uword j = std::floor(0.5 * (x.n_elem - 1));
     const double g = 0.5 * (x.n_elem - 1.0) - j;
 
-    if ((std::fabs(g) <= 1E-8) and (j % 2 == 0))
-    {
-        return y[j + 1];
-    }
+    if ((std::fabs(g) <= 1E-8) and (j % 2 == 0)) return y(j + 1);
 
-    return y[j];
+    return y(j);
 }
