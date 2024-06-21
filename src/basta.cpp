@@ -1,70 +1,73 @@
-#define ARMA_DONT_USE_OPENMP
-#include "RcppArmadillo.h"
-
+#include <Rcpp.h>
 #include <algorithm>
 #include <vector>
 #include <boost/math/special_functions/sign.hpp>
 
 using Rcpp::_;
 using Rcpp::as;
-using Rcpp::wrap;
 using Rcpp::IntegerVector;
+using Rcpp::wrap;
 using Rcpp::List;
-using Rcpp::LogicalVector;
 using Rcpp::NumericMatrix;
 using Rcpp::NumericVector;
-using Rcpp::Range;
-using Rcpp::Rcout;
-using Rcpp::seq;
-
-using arma::colvec;
-using arma::uword;
 
 // [[Rcpp::export(name = "stat.resid")]]
-Rcpp::NumericVector stat_resid(const arma::colvec& x,
-    Rcpp::Nullable<NumericVector> a__ = R_NilValue,
+Rcpp::NumericVector stat_resid(const Rcpp::NumericVector& x,
+    Rcpp::Nullable<NumericVector> a_ = R_NilValue,
     unsigned int order = 1,
     const double factor = 8,
     const double epsilon = 0.0)
 {
-    NumericVector a_;
-    auto const n = x.n_elem;
+    NumericVector a;
+    auto const n = x.length();
 
     // Determine order if a_ is not NULL
-    if (a__.isNotNull())
+    if (a_.isNotNull())
     {
-        a_ = a__;
-        order = a_.length() - 1;
+        a = a_;
+        order = a.length() - 1;
     }
 
-    if (a__.isNull())
+    if (a_.isNull())
     {
         Rcpp::Function f("stat.est");
-        a_ = f(x, _["order"] = order);
+        a = f(x, _["order"] = order);
 
-        for (uword i = 1; i < a_.length(); ++i)
+        for (R_xlen_t i = 1; i < a.length(); ++i)
         {
-            a_(i) = a_(i) / factor;
+            a(i) = a(i) / factor;
         }
     }
 
-    colvec a = as<colvec>(a_);
-    colvec y(n-order);
-    const uword n_y = y.n_elem;
+    NumericVector y(n-order);
+    R_xlen_t n_y = y.length();
+
     double numerator, denominator;
 
-    for (uword i = 0; i < n_y; ++i)
+    for (R_xlen_t i = 0; i < n_y; ++i)
     {
         numerator = (x(n - i - 1)) * (x(n - i - 1));
-        colvec tmp = arma::join_vert(
-            arma::ones<colvec>(1), arma::square(
-                arma::reverse(x.subvec(n - 1 - i - order, n - 2 - i))));
-        denominator = arma::sum(a % tmp);
+        
+        IntegerVector r = Rcpp::rev(Rcpp::seq(n - 1 - i - order, n - 1 - i));
+        NumericVector segment(order);
+        for (R_xlen_t j = 0; j < order; ++j)
+        {
+            segment(order - 1 - j) = x(j) * x(j);
+        }
+        
+        NumericVector tmp(order + 1);
+        tmp(0) = 1;
+        for (R_xlen_t j = 1; j < order + 1; ++j)
+        {
+            tmp(j) = segment(j-1);
+        }
+
+        denominator = Rcpp::sum(a * tmp);
         denominator += epsilon * numerator;
         y(n_y - 1 - i) = numerator / denominator;
     }
 
-    return wrap(y);
+    return y;
 }
 
 // [[Rcpp::export(name = "bin.segm")]]
@@ -121,22 +124,24 @@ Rcpp::List bin_segm(Rcpp::List buh, double th)
 }
 
 // [[Rcpp::export(name = "inner.prod.iter")]]
-Rcpp::NumericVector inner_prod_iter(const arma::colvec& x)
+Rcpp::NumericVector inner_prod_iter(Rcpp::NumericVector x)
 {
     using std::sqrt;
+    using Rcpp::tail;
+    using Rcpp::sum;
 
-    uword n = x.n_elem;
-    colvec I_plus = arma::zeros(n - 1);
-    colvec I_minus = arma::zeros(n - 1);
+    R_xlen_t n = x.length();
+    NumericVector I_plus(n-1); I_plus.fill(0.0);
+    NumericVector I_minus(n-1); I_minus.fill(0.0);
 
     I_plus(0) = sqrt(1.0 - 1.0 / n) * x(0);
-    I_minus(0) = arma::sum(x.tail(n - 1)) / sqrt(std::pow(n, 2.0) - n);
+    I_minus(0) = sum(tail(x, n - 1)) / sqrt(std::pow(n, 2.0) - n);
 
     double factor;
 
     if (n != 2)
     {
-        for (uword m = 0; m < n - 2; ++m)
+        for (R_xlen_t m = 0; m < n - 2; ++m)
         {
             factor = sqrt((n - m - 2.0) * (m + 1.0) / (m + 2.0)/(n- m - 1.0));
             I_plus(m + 1) = I_plus(m) * factor + x(m + 1) * sqrt( 1.0 / (m + 2.0) - 1.0 / n);
@@ -144,18 +149,19 @@ Rcpp::NumericVector inner_prod_iter(const arma::colvec& x)
         }        
     }
 
-    return wrap(I_plus - I_minus);
+    return I_plus - I_minus;
 }
 
 // [[Rcpp::export]]
-double med(const arma::colvec& x)
+double med(Rcpp::NumericVector x)
 {
-    x.brief_print();
-    if (x.n_elem <= 1) return R_NaReal;
-    
-    const arma::colvec y = arma::sort(x);
-    const uword j = std::floor(0.5 * (x.n_elem - 1));
-    const double g = 0.5 * (x.n_elem - 1.0) - j;
+    if (x.length() == 1) return x(0);
+
+    NumericVector y = Rcpp::clone(x);
+    std::sort(y.begin(), y.end());
+
+    R_xlen_t j = std::floor(0.5 * (x.length() - 1));
+    const double g = 0.5 * (x.length() - 1.0) - j;
 
     if ((std::fabs(g) <= 1E-8) and (j % 2 == 0)) return y(j + 1);
 
